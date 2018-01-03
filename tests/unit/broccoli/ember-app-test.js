@@ -49,6 +49,21 @@ describe('EmberApp', function() {
       expect(project.configPath().slice(-expected.length)).to.equal(expected);
     });
 
+    it('should update project.config() if configPath option is specified', function() {
+      project.require = function(path) {
+        return () => ({ path });
+      };
+
+      expect(project.config('development')).to.deep.equal({});
+
+      new EmberApp({
+        project,
+        configPath: '../../app-import/config/environment',
+      });
+
+      expect(project.config('development').path).to.contain('app-import/config/environment');
+    });
+
     it('should set bowerDirectory for app', function() {
       let app = new EmberApp({
         project,
